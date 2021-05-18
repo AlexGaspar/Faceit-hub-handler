@@ -22,9 +22,7 @@ const genUsersWaitingApproval = async () => {
       }
     });
 
-    // res.data.payload.items
-
-    constants.fake_applications.map(user => {
+    res.data.payload.items.map(user => {
       pool_accept.exec('maybeAcceptUser', [user])
         .catch(function (err) {
           console.error(err);
