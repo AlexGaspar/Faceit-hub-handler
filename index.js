@@ -17,7 +17,7 @@ const genUsersWaitingApproval = async () => {
     const res = await axios({
       url: constants.PUBLIC_API_HUB + constants.HUB_ID + '/application?limit=5&offset=0&sort=asc',
       headers: {
-        authorization: constants.AUTH_TOKEN,
+        authorization: `Bearer ${constants.AUTH_TOKEN}`,
         content_type: "application/json",
       }
     });
@@ -30,6 +30,8 @@ const genUsersWaitingApproval = async () => {
     });
   } catch (e) {
     console.error(e);
+  } finally {
+    setTimeout(genUsersWaitingApproval, constants.PAUSE_BETWEEN_RUN);
   }
 };
 
@@ -47,8 +49,15 @@ const genHubMembersWithLessThanMinElo = async () => {
     });
   } catch (e) {
     console.error(e);
+  } finally {
+    setTimeout(genHubMembersWithLessThanMinElo, constants.PAUSE_BETWEEN_RUN);
   }
 }
 
-// genHubMembersWithLessThanMinElo();
-// genUsersWaitingApproval();
+if (constants.RUN_KICK) {
+  genHubMembersWithLessThanMinElo();
+}
+
+if (constants.RUN_APPROVAL) {
+  genUsersWaitingApproval();
+}

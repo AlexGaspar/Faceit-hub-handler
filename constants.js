@@ -5,6 +5,9 @@ module.exports = Object.freeze({
   APP_TOKEN: 'FILL_ME_WITH_AN_APP_TOKEN',
 
   // App Settings
+  PAUSE_BETWEEN_RUN: 10000, // ms
+  RUN_KICK: true, // should we run the kick function
+  RUN_APPROVAL: true, // should we run the approval function
   MIN_ELO: 2400,
   SHIELDED_ROLE: [
     'owner',
