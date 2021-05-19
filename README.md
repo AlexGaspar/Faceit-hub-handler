@@ -18,7 +18,7 @@ Optinal Settings:
 - `RUN_KICK: bool` If set to `true` this instance will remove hub members with ELO lower than `MIN_ELO`
 - `RUN_APPROVAL: bool`  If set to `true` this instance will approve application for users with ELO greater or equals to `MIN_ELO`
 - `MIN_ELO: number` The minimum elo required to be a member of the hub
-- `SHIELDED_ROLE: array<string>` As admin might or special member might not have the required elo but we might still want to keep 
+- `SHIELDED_ROLE: array<string>` As admins, moderators or special members might not have the required elo, this introduce an array of role that will be ignored by the script.
 - `maxWorkers: number ` How many users will be proccessed in parallel, this is to avoid the script firing 100s of requests to Faceit at the same time. 
 
 ### Run the script 
