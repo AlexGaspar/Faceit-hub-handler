@@ -37,9 +37,12 @@ const genUsersWaitingApproval = async () => {
 
 const pool_remove = workerpool.pool(__dirname + '/lib/remove-low-elo-worker.js', constants.worker);
 
-const genHubMembersWithLessThanMinElo = async () => {
+const genHubMembersWithLessThanMinElo = async (offset, limit) => {
+  const nextOffset = offset + limit;
+
+  console.log('fetching from offset', offset);
   try {
-    const data = await api.hubs(constants.HUB_ID, 'members');
+    const data = await api.hubs(constants.HUB_ID, 'members', offset, limit);
 
     data.items.map(user => {
       pool_remove.exec('removeLowElo', [user])
@@ -50,12 +53,12 @@ const genHubMembersWithLessThanMinElo = async () => {
   } catch (e) {
     console.error(e);
   } finally {
-    setTimeout(genHubMembersWithLessThanMinElo, constants.PAUSE_BETWEEN_RUN);
+    setTimeout(() => genHubMembersWithLessThanMinElo(nextOffset, limit), constants.PAUSE_BETWEEN_RUN);
   }
 }
 
 if (constants.RUN_KICK) {
-  genHubMembersWithLessThanMinElo();
+  genHubMembersWithLessThanMinElo(0, 500);
 }
 
 if (constants.RUN_APPROVAL) {
