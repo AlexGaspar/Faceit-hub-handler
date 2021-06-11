@@ -1,66 +1,18 @@
 
-const Faceit = require('faceit-js');
-const workerpool = require('workerpool');
-const axios = require('axios').default;
+const cliProgress = require('cli-progress');
+
 const constants = require('./constants');
+const MemberCleanup = require('./lib/member-cleanup');
+const AccepterMember = require('./lib/accept-member');
 
-const api = new Faceit(constants.APP_TOKEN);
-
-/**
- * Main Entry points
- */
-
-const pool_accept = workerpool.pool(__dirname + '/lib/accept-application-worker.js', constants.worker);
-
-const genUsersWaitingApproval = async () => {
-  try {
-    const res = await axios({
-      url: constants.PUBLIC_API_HUB + constants.HUB_ID + '/application?limit=5&offset=0&sort=asc',
-      headers: {
-        authorization: `Bearer ${constants.AUTH_TOKEN}`,
-        content_type: "application/json",
-      }
-    });
-
-    res.data.payload.items.map(user => {
-      pool_accept.exec('maybeAcceptUser', [user])
-        .catch(function (err) {
-          console.error(err);
-        });
-    });
-  } catch (e) {
-    console.error(e);
-  } finally {
-    setTimeout(genUsersWaitingApproval, constants.PAUSE_BETWEEN_RUN);
-  }
-};
-
-const pool_remove = workerpool.pool(__dirname + '/lib/remove-low-elo-worker.js', constants.worker);
-
-const genHubMembersWithLessThanMinElo = async (offset, limit) => {
-  const nextOffset = offset + limit;
-
-  console.log('fetching from offset', offset);
-  try {
-    const data = await api.hubs(constants.HUB_ID, 'members', offset, limit);
-
-    data.items.map(user => {
-      pool_remove.exec('removeLowElo', [user])
-        .catch(function (err) {
-          console.error(err);
-        });
-    });
-  } catch (e) {
-    console.error(e);
-  } finally {
-    setTimeout(() => genHubMembersWithLessThanMinElo(nextOffset, limit), constants.PAUSE_BETWEEN_RUN);
-  }
+if (constants.RUN_APPROVAL) {
+  const acceptingBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+  let accepter = new AccepterMember(40, acceptingBar);
+  accepter.run();
 }
 
 if (constants.RUN_KICK) {
-  genHubMembersWithLessThanMinElo(0, 500);
-}
-
-if (constants.RUN_APPROVAL) {
-  genUsersWaitingApproval();
+  const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+  let memberCleanup = new MemberCleanup(40, bar);
+  memberCleanup.run();
 }

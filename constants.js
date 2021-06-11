@@ -1,18 +1,19 @@
 module.exports = Object.freeze({
   HUB_ID: 'd7e41119-ab72-465b-ad93-00923c148baf',
-  HUB_ID: '84a5026b-9aa5-47bd-b638-dbd15d2e41d8',
+  // HUB_ID: '84a5026b-9aa5-47bd-b638-dbd15d2e41d8',
   PUBLIC_API_HUB: 'https://api.faceit.com/hubs/v1/hub/',
   PUBLIC_API_STATS: 'https://api.faceit.com/stats/v1/stats/users/',
   AUTH_TOKEN: 'FILL_THIS_WITH_A_REAL_ADMIN_TOKEN',
   APP_TOKEN: 'FILL_ME_WITH_AN_APP_TOKEN',
 
   // App Settings
-  PAUSE_BETWEEN_RUN: 10000, // ms
-  
+  PAUSE_BETWEEN_RUN: 60 * 60 * 1000, // in ms (1 hour)
+  PAUSE_BETWEEN_REQUEST: 5000, // in ms (2) sec)
+
   RUN_KICK: true, // should we run the kick function
   RUN_APPROVAL: false, // should we run the approval function
 
-  MIN_ELO: 2400,
+  MIN_ELO: 1800,
   MIN_MATCHES: 300,
   SHIELDED_ROLE: [
     'owner',

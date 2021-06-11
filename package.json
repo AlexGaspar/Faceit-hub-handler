@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
+    "cli-progress": "^3.9.0",
     "faceit-js": "0.0.3",
     "lodash": "^4.17.21",
     "workerpool": "^6.1.4"
