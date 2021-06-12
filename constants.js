@@ -8,10 +8,12 @@ module.exports = Object.freeze({
 
   // App Settings
   PAUSE_BETWEEN_RUN: 60 * 60 * 1000, // in ms (1 hour)
-  PAUSE_BETWEEN_REQUEST: 5000, // in ms (2) sec)
+  PAUSE_BETWEEN_RUN_ACCETPER: 20 * 1000, // in ms (20 sec)
+  PAUSE_BETWEEN_REQUEST: 5000, // in ms (5 sec)
+  DEBUG: false,
 
-  RUN_KICK: true, // should we run the kick function
-  RUN_APPROVAL: false, // should we run the approval function
+  RUN_KICK: false, // should we run the kick function
+  RUN_APPROVAL: true, // should we run the approval function
 
   MIN_ELO: 1800,
   MIN_MATCHES: 300,
@@ -120,7 +122,7 @@ module.exports = Object.freeze({
       status: 'pending',
       createdBy: { guid: '151104a0-b2da-4d56-b76f-51f1d482434e' },
       createdAt: '2021-05-18T19:10:16.992+00:00',
-      applicantSkillLevel: 8
+      applicantSkillLevel: 10
     },
     {
       user: {
